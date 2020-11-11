@@ -4,11 +4,12 @@ namespace DiabetesNeuralNetwork
 {
 	class Validator
 	{
-		public static void ValidateUser(string name, string surname, string email)
+		public static void ValidateUser(string name, string surname, string email, string password)
 		{
 			ValidateName(name);
 			ValidateSurname(surname);
 			ValidateSurname(email);
+			ValidatePassword(password);
 		}
 		public static void ValidateName(string name)
 		{
@@ -23,6 +24,11 @@ namespace DiabetesNeuralNetwork
 		{
 			var addr = new System.Net.Mail.MailAddress(email);
 			if (!(addr.Address == email)) throw new Exception("Incorrect email address format");
+		}
+
+		public static void ValidatePassword(string password)
+		{
+			if (password == "") throw new Exception("Password cannot be empty");
 		}
 	}
 }

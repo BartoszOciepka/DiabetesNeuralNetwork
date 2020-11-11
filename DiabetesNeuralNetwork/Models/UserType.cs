@@ -1,7 +1,20 @@
-﻿namespace DiabetesNeuralNetwork.Models
+﻿using System.Collections.Generic;
+using LinqToDB.Mapping;
+
+namespace DiabetesNeuralNetwork.Models
 {
-	class UserType
+	[Table(Name = "UserType")]
+	public class UserType
 	{
+		[PrimaryKey, Identity]
+		public int userTypeID;
+		[Column(Name = "name"), NotNull]
 		public string name { get; set; } 
+		List<User> users { get; set; }
+
+		public override string ToString()
+		{
+			return this.userTypeID + " " + this.name;
+		}
 	}
 }

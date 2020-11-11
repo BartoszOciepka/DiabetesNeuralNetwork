@@ -1,20 +1,39 @@
-﻿using DiabetesNeuralNetwork.Models;
+﻿using LinqToDB.Mapping;
 
 namespace DiabetesNeuralNetwork
 {
-	class User
+	[Table(Name = "User")]
+	public class User
 	{
+		[PrimaryKey, Identity]
+		public int userID;
+		[Column(Name = "name"), NotNull]
 		public string name;
+		[Column(Name = "surname"), NotNull]
 		public string surname;
+		[Column(Name = "email"), NotNull]
 		public string email;
-		public UserType userType;
+		[Column(Name = "userTypeID"), NotNull]
+		public int userTypeID;
+		[Column(Name = "password"), NotNull]
+		public string password;
 
-		User(string name, string surname, string email, UserType userType)
+		public User()
+		{
+
+		}
+		public User(string name, string surname, string email, string password, int userTypeID)
 		{
 			this.name = name;
 			this.surname = surname;
 			this.email = email;
-			this.userType = userType;
+			this.password = password;
+			this.userTypeID = userTypeID;
+		}
+
+		public override string ToString()
+		{
+			return this.name + " " + this.surname + " " + this.email;
 		}
 	}
 }

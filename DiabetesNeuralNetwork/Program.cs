@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DiabetesNeuralNetwork.ORM;
+using LinqToDB.Data;
+using System;
 
 namespace DiabetesNeuralNetwork
 {
@@ -6,6 +8,7 @@ namespace DiabetesNeuralNetwork
 	{
 		static void Main(string[] args)
 		{
+			DataConnection.DefaultSettings = new LinqToDbSettings();
 			runMainMenu();
 			Console.ReadKey();
 		}
@@ -55,7 +58,7 @@ namespace DiabetesNeuralNetwork
 						break;
 					//Log in / Log out
 					case 4:
-						if (LoginStatus.IsLoggedIn) AuthorizationManager.LogIn();
+						if (!LoginStatus.IsLoggedIn) AuthorizationManager.LogIn();
 						else AuthorizationManager.LogOut();
 						break;
 					//Register user
