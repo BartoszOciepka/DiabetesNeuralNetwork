@@ -26,6 +26,18 @@ namespace DiabetesNeuralNetwork.Controllers
 			}
 		}
 
+		public static bool IsUserWithEmail(string email)
+		{
+			using (var db = new DBDiabetes())
+			{
+				var query = from p in db.User
+							where p.email == email
+							select p;
+
+				return query.ToList().Any();
+			}
+		}
+
 		public static User FindUserByEmailAndPassword(string email, string password)
 		{
 			using (var db = new DBDiabetes())
