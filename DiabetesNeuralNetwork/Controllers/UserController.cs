@@ -44,9 +44,18 @@ namespace DiabetesNeuralNetwork.Controllers
 			{
 				var query = from p in db.User
 							where p.email == email
-							where p.password == password
 							select p;
-				return query.ToList().FirstOrDefault();
+
+				User userFromDB = query.ToList().FirstOrDefault();
+				if (userFromDB == null) return null;
+				else
+				{
+					if (RSAHelper.decrypt(userFromDB.password) == RSAHelper.decrypt(password))
+					{
+						return userFromDB;
+					}
+					else return null;
+				}
 			}
 		}
 	}

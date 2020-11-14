@@ -11,7 +11,7 @@ namespace DiabetesNeuralNetwork
 			string email = Console.ReadLine();
 			Console.WriteLine("Password:");
 			string password = Console.ReadLine();
-			User user = UserController.FindUserByEmailAndPassword(email, password);
+			User user = UserController.FindUserByEmailAndPassword(email, RSAHelper.encrypt(password));
 			if(user == null) {
 				Console.WriteLine("Incorrect credentials");
 			}
@@ -44,7 +44,7 @@ namespace DiabetesNeuralNetwork
 				Console.WriteLine("Password:");
 				string password = Console.ReadLine();
 				Validator.ValidateUser(name, surname, email, password, userTypeID);
-				User user = new User(name, surname, email, password, userTypeID);
+				User user = new User(name, surname, email, RSAHelper.encrypt(password), userTypeID);
 				UserController.Insert(user);
 				LogInUser(user);
 				Console.WriteLine("Successfully registered new user");
