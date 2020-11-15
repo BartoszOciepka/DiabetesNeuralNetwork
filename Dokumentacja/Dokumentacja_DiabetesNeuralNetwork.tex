@@ -120,6 +120,16 @@
 \section*{Instrukcja obsługi}
 	
 \section*{Instrukcja wdrożenia}
+
+	Aby wdrożyć projekt należy wykonać poniższą listę kroków:
+	
+	\begin{enumerate}
+		\item zaimportowanie projektu w Visual Studio 2015,
+		\item import danych do bazy danych MySql (dołączono plik dump.sql zawierający potrzebne tabele),
+		\item zmiana connectionString w kodzie na odpowiadające używanej bazie,
+		danych (dokonanie zmiany klas gdy używana jest inna baza niż MySql),
+		\item uruchomienie projektu.
+	\end{enumerate}
 	
 \section*{Część testowa}
 	
@@ -137,7 +147,28 @@
 
 \section*{Komponenty systemu}
 	
-\section*{Algorytm szyfrowania} 
+\section*{Algorytm szyfrowania}
+	
+	
+	W naszym programie do rejestracji i logowania użyliśmy klasy Membership z System.Web.Security. Do szyfrowania haseł użyty został algorytm TLS 1.3. Nic nie stoi na przeszkodzie aby ten sposób zmienić. W samej konfiguracji można ustawić haszowanie, szyfrowanie lub zapisywanie haseł w trybie plain text (nie jest to zalecany sposób). Po wybraniu rodzaju można wybrać konkretny sposób enkrypcji. Poniżej przykład zmiany haszowania na SHA256 w pliku web.config poprzez atrybut hashAlgorithmType.
+	
+	\begin{lstlisting}
+		<membership
+		defaultProvider =" provider name "
+		userIsOnlineTimeWindow =" number of minutes "
+		hashAlgorithmType =" SHA256 ">
+		<providers >... </ providers >
+		</ membership >
+	\end{lstlisting}
+
+	TLS wykorzystuje Algorytm Rivesta-Shamira-Adlemana (RSA) -- jest to jeden z pierwszych i najpopularniejszych asymetrycznych algorytmów kryptograficznych o kluczu publicznym. Może być stosowany i do szyfrowania, i cyfrowego podpisywania plików.
+	
+	\smallskip
+	Polega on na liczeniu funkcji Eulera dla dużych liczb pierwszych, a jego bezpieczeństwo opiera się na trudności faktoryzacji dużych liczb złożonych.
+	
+	\smallskip
+	Każdy z rozmówców posiada parę kluczy: prywatny i publiczny. Pierwszy z nich służy do deszyfrowania wiadomości przychodzącej, a drugi do szyfrowania wychodzącej. Aby nawiązać komunikację rozmówcy muszą wymienić się swoimi kluczami publicznymi. Klucze prywatne nigdy nie są ujawniane.
+	
 	
 \section*{Model systemu eksperckiego}
 
