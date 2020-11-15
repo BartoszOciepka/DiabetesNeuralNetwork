@@ -70,7 +70,8 @@ namespace DiabetesNeuralNetwork
 						Environment.Exit(0);
 						break;
 				}
-				Console.ReadLine();
+				Console.WriteLine("Press any key...");
+				Console.ReadKey();
 				runMainMenu();
 			}
 			catch (Exception ex)
