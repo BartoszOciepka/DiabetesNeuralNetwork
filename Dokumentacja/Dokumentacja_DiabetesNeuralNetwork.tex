@@ -145,6 +145,17 @@ Podział pracy był płynny, lecz z większym naciskiem na:
 
 	
 \section*{Baza danych}
+Łączenie z bazą danych ma na stałe ustawione własności, które mogą być w razie potrzeby edytowane w klasie \emph{LinqToDbSettings.cs} we fragmencie:
+	\begin{lstlisting}
+	new ConnectionStringSettings
+	{
+		Name = "DiabetesDatabase",
+		ProviderName = "MySql",
+		ConnectionString = @"Server=localhost;Database=diabetes;Uid=;Pwd=;"
+	};
+	\end{lstlisting}
+
+
 Diagram UML bazy danych został przedstawiony na rysunku \ref{fig:dbdiagram}.
 
 
@@ -169,13 +180,20 @@ Diagram UML bazy danych został przedstawiony na rysunku \ref{fig:dbdiagram}.
 	
 	W naszym programie do rejestracji i logowania użyliśmy stworzonej przez siebie klasy \emph{AuthorizationManager}, która zawiera metody \emph{LogIn(), Register(), LogOut()}.
 	Szyfrowanie zaimplementowane zostało w klasie \emph{RSAHelper}, w której znajduje się cała logika szyfrowania opierająca się na klasie \emph{RSACryptoServiceProvider}.
-	Do szyfrowania użyty został algorytm RSA. W samej konfiguracji można ustawić haszowanie, szyfrowanie lub zapisywanie haseł w trybie plain text, choć nie jest to zalecane. Po wybraniu rodzaju można wybrać konkretny sposób enkrypcji. Poniżej przykład zmiany haszowania na SHA256 w pliku web.config poprzez atrybut hashAlgorithmType.
-	
+	Do szyfrowania użyty został algorytm RSA (definicja oraz dwa wywołania):
 	\begin{lstlisting}
-		
+		using (var rsa = new RSACryptoServiceProvider(2048))
+		...
+		User user = UserController.FindUserByEmailAndPassword(email, RSAHelper.encrypt(password));
+		...
+		User user = new User(name, surname, email, RSAHelper.encrypt(password), userTypeID);
 	\end{lstlisting}
 
-	TLS wykorzystuje Algorytm Rivesta-Shamira-Adlemana (RSA) -- jest to jeden z pierwszych i najpopularniejszych asymetrycznych algorytmów kryptograficznych o kluczu publicznym. Może być stosowany i do szyfrowania, i cyfrowego podpisywania plików.
+	
+
+
+
+	Algorytm Rivesta-Shamira-Adlemana (RSA) to jeden z pierwszych i najpopularniejszych asymetrycznych algorytmów kryptograficznych o kluczu publicznym. Może być stosowany i do szyfrowania, i cyfrowego podpisywania plików.
 	
 	\smallskip
 	Polega on na liczeniu funkcji Eulera dla dużych liczb pierwszych, a jego bezpieczeństwo opiera się na trudności faktoryzacji dużych liczb złożonych.
