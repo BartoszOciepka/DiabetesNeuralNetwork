@@ -26,15 +26,36 @@ namespace DiabetesNeuralNetwork.Controllers
 			}
 		}
 
+		public static bool IsUserWithEmail(string email)
+		{
+			using (var db = new DBDiabetes())
+			{
+				var query = from p in db.User
+							where p.email == email
+							select p;
+
+				return query.ToList().Any();
+			}
+		}
+
 		public static User FindUserByEmailAndPassword(string email, string password)
 		{
 			using (var db = new DBDiabetes())
 			{
 				var query = from p in db.User
 							where p.email == email
-							where p.password == password
 							select p;
-				return query.ToList().FirstOrDefault();
+
+				User userFromDB = query.ToList().FirstOrDefault();
+				if (userFromDB == null) return null;
+				else
+				{
+					if (RSAHelper.decrypt(userFromDB.password) == RSAHelper.decrypt(password))
+					{
+						return userFromDB;
+					}
+					else return null;
+				}
 			}
 		}
 	}

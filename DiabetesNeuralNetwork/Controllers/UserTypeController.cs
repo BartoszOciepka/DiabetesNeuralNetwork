@@ -30,6 +30,16 @@ namespace DiabetesNeuralNetwork.Controllers
 				return query.ToList().First();
 			}
 		}
+		public static List<int> GetAllUserTypeIDs()
+		{
+			using (var db = new DBDiabetes())
+			{
+				var query = from p in db.UserType
+							select p.userTypeID;
+
+				return query.ToList();
+			}
+		}
 
 		public static void Remove(int id)
 		{

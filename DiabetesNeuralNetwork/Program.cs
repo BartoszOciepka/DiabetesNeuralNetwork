@@ -8,6 +8,7 @@ namespace DiabetesNeuralNetwork
 	{
 		static void Main(string[] args)
 		{
+
 			DataConnection.DefaultSettings = new LinqToDbSettings();
 			runMainMenu();
 			Console.ReadKey();
@@ -79,8 +80,6 @@ namespace DiabetesNeuralNetwork
 				Console.ReadLine();
 				runMainMenu();
 			}
-
-			
 		}
 	}
 }
