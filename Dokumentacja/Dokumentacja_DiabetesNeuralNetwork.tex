@@ -1,3 +1,4 @@
+%\documentclass[a4paper, 12pt]{mwrep}
 \documentclass[12pt,a4paper]{article}
 \usepackage[polish]{babel}
 \usepackage[T1]{fontenc}
@@ -87,11 +88,12 @@
 \begin{document}
 	
 	\title{Modelowanie i analiza systemów informatycznych\\
-		\bigskip
-		\small{dokumentacja projektu \\
-			System wspomagania decyzji}}
-	\author{inż. Bartosz Ociepka\\
-			inż. Beniamin Stecuła}
+			\bigskip
+			\large{dokumentacja projektu:} \\
+			\large{System wspomagania decyzji}
+		}
+	\author{inż. Bartosz Ociepka
+		\and inż. Beniamin Stecuła}
 	\date{\today}
 	
 	\maketitle
@@ -104,20 +106,26 @@
 
 	\newpage
 \section*{Podział pracy}
-	inż. Bartosz Ociepka - backend\\
-	inż. Beniamin Stecuła - frontend
+Podział pracy był płynny, lecz z większym naciskiem na:
+\begin{itemize}
+	\item inż. Bartosz Ociepka -- backend, praktyka,
+	\item inż. Beniamin Stecuła -- frontend, teoria, dokumentacja.
+\end{itemize}
+	
+	
 	
 \section*{Udokumentowanie pracy}
 	Dokumentowanie pracy odbyło się na kilka sposobów:
 	\begin{itemize}
 		\item utworzenie niniejszej dokumentacji,
-		\item podział zadań na serwisie Trello:\\
-				https://trello.com/b/se2oXQzD/polap-wspomaganie-decyzji
-		\item przechowywanie kopii poprzednich wersji programu:\\
-				https://github.com/BartoszOciepka/DiabetesNeuralNetwork
+		\item zarządzanie podziałem i wykonaniem zadań w serwisie Trello,
+		\item przechowywanie kopii poprzednich wersji programu.
 	\end{itemize}
 	
 \section*{Instrukcja obsługi}
+% TODO instrukcja
+
+
 	
 \section*{Instrukcja wdrożenia}
 
@@ -132,8 +140,14 @@
 	\end{enumerate}
 	
 \section*{Część testowa}
+% TODO testy
+
+
 	
 \section*{Baza danych}
+Diagram UML bazy danych został przedstawiony na rysunku \ref{fig:dbdiagram}.
+
+
 \begin{figure}[h]
 	\centering
 	\centerline{
@@ -146,11 +160,14 @@
 
 
 \section*{Komponenty systemu}
+% TODO komponenty
+
+
 	
 \section*{Algorytm szyfrowania}
 	
 	
-	W naszym programie do rejestracji i logowania użyliśmy klasy Membership z System.Web.Security. Do szyfrowania haseł użyty został algorytm TLS 1.3. Nic nie stoi na przeszkodzie aby ten sposób zmienić. W samej konfiguracji można ustawić haszowanie, szyfrowanie lub zapisywanie haseł w trybie plain text (nie jest to zalecany sposób). Po wybraniu rodzaju można wybrać konkretny sposób enkrypcji. Poniżej przykład zmiany haszowania na SHA256 w pliku web.config poprzez atrybut hashAlgorithmType.
+	W naszym programie do rejestracji i logowania użyliśmy klasy Membership z~System.Web.Security. Do szyfrowania haseł użyty został algorytm TLS 1.3. Nic nie stoi na przeszkodzie aby ten sposób zmienić. W samej konfiguracji można ustawić haszowanie, szyfrowanie lub zapisywanie haseł w trybie plain text (nie jest to zalecany sposób). Po wybraniu rodzaju można wybrać konkretny sposób enkrypcji. Poniżej przykład zmiany haszowania na SHA256 w pliku web.config poprzez atrybut hashAlgorithmType.
 	
 	\begin{lstlisting}
 		<membership
@@ -170,9 +187,49 @@
 	Każdy z rozmówców posiada parę kluczy: prywatny i publiczny. Pierwszy z nich służy do deszyfrowania wiadomości przychodzącej, a drugi do szyfrowania wychodzącej. Aby nawiązać komunikację rozmówcy muszą wymienić się swoimi kluczami publicznymi. Klucze prywatne nigdy nie są ujawniane.
 	
 	
-\section*{Model systemu eksperckiego}
+\section*{System ekspercki}
+
+	W dziale sztucznej inteligencji systemem eksperckim (Expert System -- ES) nazywa się system komputerowy, który emuluje podejmowanie decyzji przez ludzkiego specjalistę z danej dziedziny. Odzwierciedla procesy myślowe na zasadzie działania ludzkiego mózgu.
+	
+	Do rozwiązań wykorzystujących ES zaliczamy:
+	\begin{itemize}
+		\item systemy agentowe,
+		\item agenty programowe,
+		\item eksplorację danych,
+		\item wspomaganie twórczego myślenia,
+		\item ontologie systematyzujące wiedzę.
+	\end{itemize}
+	\bigskip
+	
+	ES powinien zawierać trzy charakterystyczne, podstawowe cechy:
+	\begin{itemize}
+		\item bazy wiedzy -- schematycznie zapisane informacje uzyskane od ludzkich ekspertów w danej dziedzinie,
+		\item procedury wnioskujące -- odzwierciedlające wnioskowanie symboliczne, które jest charakterystyczne dla funkcjonowania ludzkiego mózgu,
+		\item zdolność do poszerzania wiedzy -- umożliwienie ciągłego rozwoju systemu w przypadku stale napływających nowych informacji koniecznych do uwzględnienia aby otrzymywać stale aktualne wyniki zgodne z nowym stanem wiedzy w dziedzinie.
+	\end{itemize}
+	\bigskip
+	
+	Struktura ES składa się z sześciu podstawowych elementów:
+	\begin{itemize}
+		\item baza wiedzy -- składająca się ze zbioru reguł,
+		\item baza danych -- zawierająca dane obiektów, wartości, przypadki i hipotezy,
+		\item procedury wnioskowania -- jest to maszyna wnioskująca,
+		\item procedury objaśniania -- tłumaczą strategię wnioskowania,
+		\item procedury sterowania dialogiem -- funkcje wejścia/wyjścia sterujące programem i wyznaczające zadania, które ma wykonać
+		\item procedury zarządzania wiedzą -- pozwalają na modyfikację oraz rozszerzanie, pozyskiwanie wiedzy.
+	\end{itemize}
+	
+	
+	
+	%ES zazwyczaj działa na zasadzie rozpatrywania warunków if-else.
+	
+	
+	
+	
 
 \section*{Przykładowy kod z aplikacji z testami}
+% TODO kod aplikacji
+
 
 \begin{lstlisting}
 	Tutaj wklejamy pelen kod. 
