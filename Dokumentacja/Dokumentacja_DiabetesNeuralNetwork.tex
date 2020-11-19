@@ -167,15 +167,12 @@ Diagram UML bazy danych został przedstawiony na rysunku \ref{fig:dbdiagram}.
 \section*{Algorytm szyfrowania}
 	
 	
-	W naszym programie do rejestracji i logowania użyliśmy klasy Membership z~System.Web.Security. Do szyfrowania haseł użyty został algorytm TLS 1.3. Nic nie stoi na przeszkodzie aby ten sposób zmienić. W samej konfiguracji można ustawić haszowanie, szyfrowanie lub zapisywanie haseł w trybie plain text (nie jest to zalecany sposób). Po wybraniu rodzaju można wybrać konkretny sposób enkrypcji. Poniżej przykład zmiany haszowania na SHA256 w pliku web.config poprzez atrybut hashAlgorithmType.
+	W naszym programie do rejestracji i logowania użyliśmy stworzonej przez siebie klasy \emph{AuthorizationManager}, która zawiera metody \emph{LogIn(), Register(), LogOut()}.
+	Szyfrowanie zaimplementowane zostało w klasie \emph{RSAHelper}, w której znajduje się cała logika szyfrowania opierająca się na klasie \emph{RSACryptoServiceProvider}.
+	Do szyfrowania użyty został algorytm RSA. W samej konfiguracji można ustawić haszowanie, szyfrowanie lub zapisywanie haseł w trybie plain text, choć nie jest to zalecane. Po wybraniu rodzaju można wybrać konkretny sposób enkrypcji. Poniżej przykład zmiany haszowania na SHA256 w pliku web.config poprzez atrybut hashAlgorithmType.
 	
 	\begin{lstlisting}
-		<membership
-		defaultProvider =" provider name "
-		userIsOnlineTimeWindow =" number of minutes "
-		hashAlgorithmType =" SHA256 ">
-		<providers >... </ providers >
-		</ membership >
+		
 	\end{lstlisting}
 
 	TLS wykorzystuje Algorytm Rivesta-Shamira-Adlemana (RSA) -- jest to jeden z pierwszych i najpopularniejszych asymetrycznych algorytmów kryptograficznych o kluczu publicznym. Może być stosowany i do szyfrowania, i cyfrowego podpisywania plików.
