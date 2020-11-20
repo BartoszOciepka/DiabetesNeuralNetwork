@@ -11,25 +11,7 @@ namespace DiabetesNeuralNetwork
 			string email = Console.ReadLine();
 			Console.WriteLine("Password:");
 
-			var password = string.Empty;
-			ConsoleKey key;
-			do
-			{
-				var keyInfo = Console.ReadKey(intercept: true);
-				key = keyInfo.Key;
-
-				if (key == ConsoleKey.Backspace && password.Length > 0)
-				{
-					Console.Write("\b \b");
-					password = password.Remove(password.Length - 1);
-				}
-				else if (!char.IsControl(keyInfo.KeyChar))
-				{
-					Console.Write("*");
-					password += keyInfo.KeyChar;
-				}
-			} while (key != ConsoleKey.Enter);
-			Console.WriteLine();
+			var password = readPassword();
 
 			User user = UserController.FindUserByEmailAndPassword(email, RSAHelper.encrypt(password));
 			if(user == null) {
@@ -62,7 +44,9 @@ namespace DiabetesNeuralNetwork
 				Console.WriteLine("Email:");
 				string email = Console.ReadLine();
 				Console.WriteLine("Password:");
-				string password = Console.ReadLine();
+				string password = readPassword();
+
+
 				Validator.ValidateUser(name, surname, email, password, userTypeID);
 				User user = new User(name, surname, email, RSAHelper.encrypt(password), userTypeID);
 				UserController.Insert(user);
@@ -75,11 +59,39 @@ namespace DiabetesNeuralNetwork
 			}
 		}
 
-		public static void LogOut()
+        private static string readPassword()
+        {
+			var password = string.Empty;
+			ConsoleKey key;
+			do
+			{
+				var keyInfo = Console.ReadKey(intercept: true);
+				key = keyInfo.Key;
+
+				if (key == ConsoleKey.Backspace && password.Length > 0)
+				{
+					Console.Write("\b \b");
+					password = password.Remove(password.Length - 1);
+				}
+				else if (!char.IsControl(keyInfo.KeyChar))
+				{
+					Console.Write("*");
+					password += keyInfo.KeyChar;
+				}
+			} while (key != ConsoleKey.Enter);
+			Console.WriteLine();
+			
+			return password;
+		}
+
+        public static void LogOut()
 		{
 			LoginStatus.IsLoggedIn = false;
 			LoginStatus.LoggedInUser = null;
 			Console.WriteLine("Successfully logged out");
 		}
+
+
+
 	}
 }

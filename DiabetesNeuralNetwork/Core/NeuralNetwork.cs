@@ -9,8 +9,10 @@ namespace DiabetesNeuralNetwork
 	class NeuralNetwork
 	{
 		//Set these based on the specification to other absolute paths or relative ones
-		static string csvFileLocation = "C:\\Users\\barto\\Documents\\Visual Studio 2015\\Projects\\DiabetesNeuralNetwork\\Data\\diabetes.csv";
-		static string savedNetworkLocation = "C:\\Users\\barto\\Documents\\Visual Studio 2015\\Projects\\DiabetesNeuralNetwork\\Data\\network.txt";
+		//static string csvFileLocation = "C:\\Users\\barto\\Documents\\Visual Studio 2015\\Projects\\DiabetesNeuralNetwork\\Data\\diabetes.csv";
+		//static string savedNetworkLocation = "C:\\Users\\barto\\Documents\\Visual Studio 2015\\Projects\\DiabetesNeuralNetwork\\Data\\network.txt";
+		static string csvFileLocation = "C:\\Users\\Benek\\OneDrive\\STUDIA\\MS Mag 2\\1. Modelo i ana sys inf - DPołap\\Projekt 2 - decyzje lekarzy cukrzyca\\DiabetesNeuralNetwork\\Data\\diabetes.csv";
+		static string savedNetworkLocation = "C:\\Users\\Benek\\OneDrive\\STUDIA\\MS Mag 2\\1. Modelo i ana sys inf - DPołap\\Projekt 2 - decyzje lekarzy cukrzyca\\DiabetesNeuralNetwork\\Data\\network.txt";
 		public static void testData()
 		{
 			Console.WriteLine("Pregnancies:");

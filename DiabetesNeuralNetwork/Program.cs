@@ -1,4 +1,6 @@
-﻿using DiabetesNeuralNetwork.ORM;
+﻿using DiabetesNeuralNetwork.Controllers;
+using DiabetesNeuralNetwork.Models;
+using DiabetesNeuralNetwork.ORM;
 using LinqToDB.Data;
 using System;
 
@@ -17,23 +19,28 @@ namespace DiabetesNeuralNetwork
 		public static void runMainMenu()
 		{
 			Console.Clear();
-			if (!LoginStatus.IsLoggedIn)
+
+			if (LoginStatus.IsLoggedIn)
 			{
-				Console.WriteLine("Hello stranger");
+				Console.WriteLine("Hello " + LoginStatus.LoggedInUser.name + " " + LoginStatus.LoggedInUser.surname);
+				int userTypeID = LoginStatus.LoggedInUser.userTypeID;
+				UserType userType = UserTypeController.GetById(userTypeID); 
+				Console.WriteLine("Role: " + userType.name);	// patient doctor
 			}
 			else
 			{
-				Console.WriteLine("Hello " + LoginStatus.LoggedInUser.name + " " + LoginStatus.LoggedInUser.surname);
+				Console.WriteLine("Hello stranger");
 			}
+
 			Console.WriteLine();
 			Console.WriteLine("MENU");
-			Console.WriteLine("1. Train dataset");
+			Console.WriteLine("1. Train dataset");        
 			Console.WriteLine("2. Add data to dataset");
-			Console.WriteLine("3. Test data");
+			Console.WriteLine("3. Test data");              // patient
 			if (LoginStatus.IsLoggedIn) Console.WriteLine("4. Log out");
-			else Console.WriteLine("4. Log in");
-			Console.WriteLine("5. Register");
-			Console.WriteLine("6. Exit program");
+			else Console.WriteLine("4. Log in");            // patient
+			Console.WriteLine("5. Register");           // patient
+			Console.WriteLine("6. Exit program");           // patient
 			try
 			{
 				int userPick = Int32.Parse(Console.ReadLine());
