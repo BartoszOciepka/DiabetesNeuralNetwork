@@ -77,6 +77,7 @@ namespace DiabetesNeuralNetwork
 			catch (Exception ex)
 			{
 				Console.WriteLine("Incorrect input. Please try again");
+
 				Console.ReadLine();
 				runMainMenu();
 			}
