@@ -30,7 +30,6 @@ namespace DiabetesNeuralNetwork
 				}
 			} while (key != ConsoleKey.Enter);
 			Console.WriteLine();
-			Console.WriteLine(password);
 
 			User user = UserController.FindUserByEmailAndPassword(email, RSAHelper.encrypt(password));
 			if(user == null) {
