@@ -50,12 +50,13 @@ namespace DiabetesNeuralNetwork
 				insulin, BMI, diabetesPedigreeFunction, age};
 			double[] result = network.Compute(data);
 
+			Console.WriteLine("Outcome: " + result[0]);
 			Console.WriteLine("Outcome: " + Math.Round(result[0]));
 		}
 
 		public static void trainNetwork()
 		{
-			trainNetwork(new int[] { 5, 3, 2, 1 }, 5);
+			trainNetwork(new int[] { 20, 1}, 1.8);
 		}
 		public static double trainNetwork(int[] neurons, double alphaValue)
 		{
