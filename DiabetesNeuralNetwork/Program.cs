@@ -20,12 +20,34 @@ namespace DiabetesNeuralNetwork
 		{
 			Console.Clear();
 
-			writeMainMenu();
+			string userTypeName = "";		// correct
+			//string userTypeName = "doctor";		// test
+
+			if (LoginStatus.IsLoggedIn)
+			{
+				Console.WriteLine("Hello " + LoginStatus.LoggedInUser.name + " " + LoginStatus.LoggedInUser.surname);
+				int userTypeID = LoginStatus.LoggedInUser.userTypeID;
+				UserType userType = UserTypeController.GetById(userTypeID);
+				userTypeName = userType.name;
+				Console.WriteLine("Role: " + userTypeName);    // patient doctor
+			}
+			else
+			{
+				Console.WriteLine("Hello stranger");
+			}
+
+			writeMainMenu(userTypeName);
 
 			try
 			{
-				int userPick = Int32.Parse(Console.ReadLine());
-				if (userPick <= 0 || userPick >= 7) {
+				int selectionMaxRange;
+				if (userTypeName == "doctor")
+					selectionMaxRange = 7;
+				else
+					selectionMaxRange = 4;
+
+					int userPick = Int32.Parse(Console.ReadLine());
+				if (userPick <= 0 || userPick > selectionMaxRange) {
 					Console.Write("Value not in range. Please try again");
 					Console.ReadLine();
 					runMainMenu();
@@ -60,35 +82,33 @@ namespace DiabetesNeuralNetwork
 					case 6:
 						NeuralNetwork.addToDataset();
 						break;
+					// Comparing training parameters
+					case 7:
+						NeuralNetwork.compareTrainingParameters();
+						ConsoleKey keyY = ConsoleKey.Enter;
+						while (!Equals(keyY, ConsoleKey.Y))
+						{
+							Console.Write("Do you want to clear? Write 'y': ");
+							keyY = Console.ReadKey().Key;
+							Console.WriteLine();
+						}
+						break;
 				}
-				Console.ReadLine();
+				Console.WriteLine();
+				Console.WriteLine("Press enter...");
+				Console.ReadKey();
 				runMainMenu();
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				Console.WriteLine("Incorrect input. Please try again");
-
-				Console.ReadLine();
+				Console.ReadKey();
 				runMainMenu();
 			}
 		}
 
-        private static void writeMainMenu()
+        private static void writeMainMenu(string userTypeName)
         {
-			string userTypeName = "";
-
-			if (LoginStatus.IsLoggedIn)
-			{
-				Console.WriteLine("Hello " + LoginStatus.LoggedInUser.name + " " + LoginStatus.LoggedInUser.surname);
-				int userTypeID = LoginStatus.LoggedInUser.userTypeID;
-				UserType userType = UserTypeController.GetById(userTypeID);
-				userTypeName = userType.name;
-				Console.WriteLine("Role: " + userType.name);    // patient doctor
-			}
-			else
-			{
-				Console.WriteLine("Hello stranger");
-			}
 
 			Console.WriteLine();
 			Console.WriteLine("MENU");
@@ -102,6 +122,7 @@ namespace DiabetesNeuralNetwork
 				Console.WriteLine();
 				Console.WriteLine("5. Train dataset");
 				Console.WriteLine("6. Add data to dataset");
+				Console.WriteLine("7. Compare training parameters");
 			}
 		}
     }
