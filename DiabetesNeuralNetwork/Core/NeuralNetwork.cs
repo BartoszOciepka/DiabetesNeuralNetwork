@@ -13,7 +13,10 @@ namespace DiabetesNeuralNetwork
 		//static string savedNetworkLocation = "C:\\Users\\barto\\Documents\\Visual Studio 2015\\Projects\\DiabetesNeuralNetwork\\Data\\network.txt";
 		static string csvFileLocation = "C:\\Users\\Benek\\OneDrive\\STUDIA\\MS Mag 2\\1. Modelo i ana sys inf - DPołap\\Projekt 2 - decyzje lekarzy cukrzyca\\DiabetesNeuralNetwork\\Data\\diabetes.csv";
 		static string savedNetworkLocation = "C:\\Users\\Benek\\OneDrive\\STUDIA\\MS Mag 2\\1. Modelo i ana sys inf - DPołap\\Projekt 2 - decyzje lekarzy cukrzyca\\DiabetesNeuralNetwork\\Data\\network.txt";
-		public static void testData()
+        
+		
+
+        public static void testData()
 		{
 			Console.WriteLine("Pregnancies:");
 			int pregnancies = Int32.Parse(Console.ReadLine());
@@ -36,7 +39,7 @@ namespace DiabetesNeuralNetwork
 				diabetesPedigreeFunction, age);
 		}
 
-		public static void testData(int pregnancies,
+        public static void testData(int pregnancies,
 			int glucose,
 			int bloodPressure,
 			int skinThickness,
@@ -50,14 +53,84 @@ namespace DiabetesNeuralNetwork
 				insulin, BMI, diabetesPedigreeFunction, age};
 			double[] result = network.Compute(data);
 
+			Console.WriteLine("Outcome: " + result[0]);
 			Console.WriteLine("Outcome: " + Math.Round(result[0]));
 		}
 
-		public static void trainNetwork()
+
+		private static int maxNeurons;
+		private static int minNeuronsBefore;
+		private static int layersNumber;
+		private static double alpha = 1.8;
+		private static double maxError = 30;
+		internal static void compareTrainingParameters()
 		{
-			trainNetwork(new int[] { 5, 3, 2, 1 }, 5);
+			//Random rand = new Random();
+			maxNeurons = 16;
+			minNeuronsBefore = maxNeurons;
+			int maxLayers = 3;
+
+			Console.WriteLine("Max neurons in a layer:\t" + maxNeurons);
+			Console.WriteLine("Max number of layers:\t" + maxLayers);
+			Console.WriteLine("Alpha:\t" + alpha);
+			Console.WriteLine("Max error accepted:\t" + maxError);
+
+			for (layersNumber = 2; layersNumber<=maxLayers; layersNumber++)
+			{
+				Console.WriteLine("\nCurrent number of layers:\t" + layersNumber);
+
+				int[] neuronsTable = new int[layersNumber];
+				neuronsTable[layersNumber - 1] = 1;
+
+				// generate all possibilities for a set of layers
+				//neurons[i] = rand.Next(1, maxNeurons);
+				incrementNeuron(0, neuronsTable, minNeuronsBefore);
+			}
 		}
-		public static double trainNetwork(int[] neurons, double alphaValue)
+        private static void incrementNeuron(int layer, int[] neuronsTable, int minNeuronsBefore)
+        {
+			double error;
+			// last layer with neurons
+            if(layer==layersNumber-2)
+            {
+				for(int neu=1; neu<=minNeuronsBefore; neu++)
+                {
+					neuronsTable[layer] = neu;
+
+					error = trainNetwork(neuronsTable, alpha, false);
+					if (error <= maxError)
+					{
+						foreach (int n in neuronsTable) Console.Write(n + " ");
+						Console.WriteLine("\tError: " + error);
+					}
+				}
+				foreach (int n in neuronsTable) Console.Write(n + " ");
+				Console.WriteLine();
+			}
+			// increment and next number
+            else
+            {
+				for (int neu = 1; neu <= minNeuronsBefore; neu++)
+				{
+					neuronsTable[layer] = neu;
+					if (minNeuronsBefore > neu)
+						incrementNeuron(layer+1, neuronsTable, neu);
+					else
+						incrementNeuron(layer + 1, neuronsTable, minNeuronsBefore);
+				}
+				//foreach (int n in neuronsTable) Console.Write(n + " ");
+				//Console.WriteLine();
+				return;
+			}
+        }
+
+        public static void trainNetwork()
+		{
+			double error = trainNetwork(new int[] { 20, 1}, 1.8, true);
+
+			Console.WriteLine("Error: " + error);
+		}
+		public static double trainNetwork(int[] neurons, double alphaValue, bool save)
 		{
 			double[][] allData = loadDataFromCSVFile(csvFileLocation);
 
@@ -87,12 +160,11 @@ namespace DiabetesNeuralNetwork
 
 				if (index > 1000) needToStop = true;
 			}
-			
-			Console.WriteLine("Error: " + error);
-			network.Save(savedNetworkLocation);
 
+			if (save) network.Save(savedNetworkLocation);
 			return error;
 		}
+
 		public static void addToDataset()
 		{
 
