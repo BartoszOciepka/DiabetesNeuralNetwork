@@ -178,9 +178,20 @@ Diagram UML bazy danych został przedstawiony na rysunku \ref{fig:dbdiagram}.
 
 
 \section*{Komponenty systemu}
-% TODO komponenty
+W naszym programie komponenty systemu uporządkowane są w odpowienich folderach o nazwach pokazujących jakie pliki tam znajdziemy. I tak mamy:\\
+\begin{itemize}
+\item Core - z głównymi elementami systemu, w naszym wypadku sieć neuronową\\
+\item Authorization - pliki do logowania/rejestracji oraz trzymania ich stanu\\
+\item Controllers - tutaj są kontrolery używane jako most między bazą danych a modelami\\
+\item Helpers - klasy pomocnicze do walidacji i szyfrowania\\
+\item Models - modele używane w programie\\
+\item ORM - konfiguracja ORMa, którego używamy do komunikacji z bazą\\
+\end{itemize}
 
+Użyliśmy wzorca projektowego Singleton, dzięki temu nie musimy tworzyć obiektu gdy chcemy zwalidować dane lub je zaszyfrować. Można też uznać, że w ramach używania biblioteki AForge do sieci neuronowej używamy wzorca Fasada.\\\\
 
+Nasza sieć neuronowa jest utworzona przy wykorzystaniu biblioteki AForge \\(http://www.aforgenet.com/framework/docs/). Nie jest to zbyt znana biblioteka, ale do jej wykorzystania przekonała nas bardzo dokładna dokumentacja.\\
+Biblioteka udostępnia nam obiekt ActivationNetwork, który w konstruktorze bierze funkcję aktywacyjną, ilość wejsć sieci oraz tablicę neuronów w poszczególnych warstwach. W naszym wypadku za funkcję aktywacyjną wzieliśmy funkcję sygmoidalną z alfą równą 1.8 (taką wartość uznaliśmy za najlepszą w ramach testowania). Gdy już mamy utworzony obiekt sieci musimy ją nauczyc. Służy do tego klasa BackPropagationLearning (jak i inne, ale my będziemy uczyć sieć używając propagacji wstecznej).
 	
 \section*{Algorytm szyfrowania}
 	
