@@ -62,7 +62,7 @@ namespace DiabetesNeuralNetwork
 		private static int minNeuronsBefore;
 		private static int layersNumber;
 		private static double alpha = 1.8;
-		private static double maxError = 30;
+		private static double maxError = 50;
 		internal static void compareTrainingParameters()
 		{
 			//Random rand = new Random();
@@ -97,14 +97,22 @@ namespace DiabetesNeuralNetwork
                 {
 					neuronsTable[layer] = neu;
 
-					error = trainNetwork(neuronsTable, alpha, false);
+					int timesEachValuesAreTested = 1;
+
+					Console.Write("Testing: ");
+					foreach (int n in neuronsTable) Console.Write(n + " ");
+
+					error = trainNetwork(neuronsTable, alpha, false, timesEachValuesAreTested);
 					if (error <= maxError)
 					{
-						foreach (int n in neuronsTable) Console.Write(n + " ");
 						Console.WriteLine("\tError: " + error);
 					}
+					else
+					{
+						Console.WriteLine("\tError too much");
+					}
 				}
-				foreach (int n in neuronsTable) Console.Write(n + " ");
+				//foreach (int n in neuronsTable) Console.Write(n + " ");
 				Console.WriteLine();
 			}
 			// increment and next number
@@ -165,9 +173,54 @@ namespace DiabetesNeuralNetwork
 			return error;
 		}
 
+		public static double trainNetwork(int[] neurons, double alphaValue, bool save, int numberOfTimes)
+		{
+			double sum = 0.0;
+
+			for(int i = 0; i <= numberOfTimes; i++)
+			{
+				double error = trainNetwork(neurons, alphaValue, save);
+				sum += error;
+			}
+
+			return sum / numberOfTimes;
+		}
 		public static void addToDataset()
 		{
+			Console.WriteLine("Pregnancies:");
+			int pregnancies = Int32.Parse(Console.ReadLine());
+			Console.WriteLine("Glucose:");
+			int glucose = Int32.Parse(Console.ReadLine());
+			Console.WriteLine("Blood pressure:");
+			int bloodPressure = Int32.Parse(Console.ReadLine());
+			Console.WriteLine("Skin thickness:");
+			int skinThickness = Int32.Parse(Console.ReadLine());
+			Console.WriteLine("Insulin:");
+			int insulin = Int32.Parse(Console.ReadLine());
+			Console.WriteLine("BMI:");
+			double bmi = Double.Parse(Console.ReadLine());
+			Console.WriteLine("Diabetes pedigree function:");
+			double diabetesPedigreeFunction = Double.Parse(Console.ReadLine());
+			Console.WriteLine("Age:");
+			int age = Int32.Parse(Console.ReadLine());
+			Console.WriteLine("Result: ");
+			int result = Int32.Parse(Console.ReadLine());
 
+			addToDataset(pregnancies, glucose, bloodPressure, skinThickness, insulin, bmi, diabetesPedigreeFunction, age, result);
+		}
+
+		public static void addToDataset(int pregnancies, int glucose, int bloodPressure, int skinThickness, int insulin, double bmi, double diabetesPedigreeFunction, int age, int result)
+		{
+			try
+			{
+				string newCsvLine = Environment.NewLine + pregnancies + "," + glucose + "," + bloodPressure + "," + skinThickness + "," + insulin + "," + bmi + "," + diabetesPedigreeFunction + "," + age + "," + result;
+
+				File.AppendAllText(csvFileLocation, newCsvLine);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+			}
 		}
 
 		public static double[][] loadDataFromCSVFile(string fileLocation)
