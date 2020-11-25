@@ -146,12 +146,7 @@ Wchodząc w każdą opcję użytkownik jest prowadzony za rękę przez cały pro
 		danych (dokonanie zmiany klas gdy używana jest inna baza niż MySql),
 		\item uruchomienie projektu.
 	\end{enumerate}
-	
-\section*{Część testowa}
-% TODO testy
-
-
-	
+		
 \section*{Baza danych}
 Łączenie z bazą danych ma na stałe ustawione własności, które mogą być w razie potrzeby edytowane w klasie \emph{LinqToDbSettings.cs} we fragmencie:
 	\begin{lstlisting}
@@ -268,11 +263,327 @@ f(x)=\dfrac{1}{1+E^{-\alpha *x}}
 	
 
 \section*{Przykładowy kod z aplikacji z testami}
-% TODO kod aplikacji
 
-
+RSAHelper.cs
 \begin{lstlisting}
-	Tutaj wklejamy pelen kod. 
+using System;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace DiabetesNeuralNetwork
+{
+	public class RSAHelper
+	{
+		public static string containerName = "defaultContainerName";
+		public static string encrypt(string message)
+		{
+			var bytesToEncrypt = Encoding.UTF8.GetBytes(message);
+
+			using (var rsa = new RSACryptoServiceProvider(2048))
+			{
+				try
+				{
+					rsa.FromXmlString(RSAHelper.getPublicKeyFromContainer());
+					var encryptedData = rsa.Encrypt(bytesToEncrypt, true);
+					var base64Encrypted = Convert.ToBase64String(encryptedData);
+					return base64Encrypted;
+				}
+				finally
+				{
+					rsa.PersistKeyInCsp = false;
+				}
+			}
+		}
+
+		public static string decrypt(string message)
+		{
+			var bytesToDescrypt = Encoding.UTF8.GetBytes(message);
+
+			using (var rsa = new RSACryptoServiceProvider(2048))
+			{
+				try
+				{
+					rsa.FromXmlString(RSAHelper.getPrivateKeyFromContainer());
+
+					var resultBytes = Convert.FromBase64String(message);
+					var decryptedBytes = rsa.Decrypt(resultBytes, true);
+					var decryptedData = Encoding.UTF8.GetString(decryptedBytes);
+					return decryptedData.ToString();
+				}
+				finally
+				{
+					rsa.PersistKeyInCsp = false;
+				}
+			}
+		}
+
+		// Run this method before any encryption.
+		// This method adds a new key container and saves it on the machine. That way the public and private keys are the same each run.
+		public static void addKeysToContainer()
+		{
+			var parameters = new CspParameters
+			{
+				KeyContainerName = RSAHelper.containerName
+			};
+
+			var rsa = new RSACryptoServiceProvider(parameters);
+
+			Console.WriteLine("Added new key provider to default container");
+		}
+
+		public static string getPublicKeyFromContainer()
+		{
+			var parameters = new CspParameters
+			{
+				KeyContainerName = containerName
+			};
+			
+			var rsa = new RSACryptoServiceProvider(parameters);
+			var publicKey = rsa.ExportParameters(false); //Generowanie klucza publiczny
+			string publicKeyString = RSAHelper.GetKeyString(publicKey);
+
+			// Display the key information to the console.
+			Console.WriteLine($"Public key retrieved from container");
+
+			return publicKeyString;
+		}
+
+		public static string getPrivateKeyFromContainer()
+		{
+			var parameters = new CspParameters
+			{
+				KeyContainerName = containerName
+			};
+
+			var rsa = new RSACryptoServiceProvider(parameters);
+			var privateKey = rsa.ExportParameters(true); //Generowanie klucza publiczny
+			string privateKeyString = RSAHelper.GetKeyString(privateKey);
+
+			Console.WriteLine("Private key retrieved from container");
+
+			return privateKeyString;
+		}
+		public static string GetKeyString(RSAParameters key)
+		{
+			var stringWriter = new System.IO.StringWriter();
+			var xmlSerializer = new System.Xml.Serialization.XmlSerializer(typeof(RSAParameters));
+			xmlSerializer.Serialize(stringWriter, key);
+			return stringWriter.ToString();
+		}
+	}
+}
+
+\end{lstlisting}
+
+UserType.cs
+\begin{lstlisting}
+using System.Collections.Generic;
+using LinqToDB.Mapping;
+
+namespace DiabetesNeuralNetwork.Models
+{
+	[Table(Name = "UserType")]
+	public class UserType
+	{
+		[PrimaryKey, Identity]
+		public int userTypeID;
+		[Column(Name = "name"), NotNull]
+		public string name { get; set; } 
+		List<User> users { get; set; }
+
+		public override string ToString()
+		{
+			return this.userTypeID + " " + this.name;
+		}
+	}
+}
+
+\end{lstlisting}
+
+User.cs
+\begin{lstlisting}
+using LinqToDB.Mapping;
+
+namespace DiabetesNeuralNetwork
+{
+	[Table(Name = "User")]
+	public class User
+	{
+		[PrimaryKey, Identity]
+		public int userID;
+		[Column(Name = "name"), NotNull]
+		public string name;
+		[Column(Name = "surname"), NotNull]
+		public string surname;
+		[Column(Name = "email"), NotNull]
+		public string email;
+		[Column(Name = "userTypeID"), NotNull]
+		public int userTypeID;
+		[Column(Name = "password"), NotNull]
+		public string password;
+
+		public User()
+		{
+
+		}
+		public User(string name, string surname, string email, string password, int userTypeID)
+		{
+			this.name = name;
+			this.surname = surname;
+			this.email = email;
+			this.password = password;
+			this.userTypeID = userTypeID;
+		}
+
+		public override string ToString()
+		{
+			return this.name + " " + this.surname + " " + this.email;
+		}
+	}
+}
+
+\end{lstlisting}
+
+AuthorizationManager.cs
+\begin{lstlisting}
+using DiabetesNeuralNetwork.Controllers;
+using System;
+
+namespace DiabetesNeuralNetwork
+{
+	class AuthorizationManager
+	{
+		public static void LogIn()
+		{
+			Console.WriteLine("Email:");
+			string email = Console.ReadLine();
+			Console.WriteLine("Password:");
+
+			var password = readPassword();
+
+			User user = UserController.FindUserByEmailAndPassword(email, RSAHelper.encrypt(password));
+			if(user == null) {
+				Console.WriteLine("Incorrect credentials");
+			}
+			else
+			{
+				LogInUser(user);
+				Console.WriteLine("Hi " + user.name + "! You were successfully logged in.");
+			}
+		}
+
+		public static void LogInUser(User user)
+		{
+			LoginStatus.IsLoggedIn = true;
+			LoginStatus.LoggedInUser = user;
+		}
+
+		public static void Register()
+		{
+			try
+			{
+				Console.WriteLine("What user type to register:");
+				UserTypeController.GetAll().ForEach(i => Console.WriteLine("{0}\t", i));
+				int userTypeID = Int32.Parse(Console.ReadLine());
+				Console.WriteLine("Name:");
+				string name = Console.ReadLine();
+				Console.WriteLine("Surname:");
+				string surname = Console.ReadLine();
+				Console.WriteLine("Email:");
+				string email = Console.ReadLine();
+				Console.WriteLine("Password:");
+				string password = readPassword();
+
+
+				Validator.ValidateUser(name, surname, email, password, userTypeID);
+				User user = new User(name, surname, email, RSAHelper.encrypt(password), userTypeID);
+				UserController.Insert(user);
+				LogInUser(user);
+				Console.WriteLine("Successfully registered new user");
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+			}
+		}
+
+        private static string readPassword()
+        {
+			var password = string.Empty;
+			ConsoleKey key;
+			do
+			{
+				var keyInfo = Console.ReadKey(intercept: true);
+				key = keyInfo.Key;
+
+				if (key == ConsoleKey.Backspace && password.Length > 0)
+				{
+					Console.Write("\b \b");
+					password = password.Remove(password.Length - 1);
+				}
+				else if (!char.IsControl(keyInfo.KeyChar))
+				{
+					Console.Write("*");
+					password += keyInfo.KeyChar;
+				}
+			} while (key != ConsoleKey.Enter);
+			Console.WriteLine();
+			
+			return password;
+		}
+
+        public static void LogOut()
+		{
+			LoginStatus.IsLoggedIn = false;
+			LoginStatus.LoggedInUser = null;
+			Console.WriteLine("Successfully logged out");
+		}
+
+
+
+	}
+}
+\end{lstlisting}
+
+Przykładowe testy:
+\begin{lstlisting}
+		[TestMethod]
+		public void TestRSACorrectlyEncryptsAndDecrypts()
+		{
+			string testString = "Ala ma kota";
+
+			string encryptedText = RSAHelper.encrypt(testString);
+
+			Assert.AreEqual(testString, RSAHelper.decrypt(encryptedText), false, "Original text and same text after encrypt and decrypt are not the same");
+		}
+		[TestMethod]
+		public void TestRSAEncryptsTheSameEachTime()
+		{
+			string testString = "Ala ma kota";
+
+			string encryptedText = RSAHelper.encrypt(testString);
+			string anotherEncryptedText = RSAHelper.encrypt(testString);
+
+			Assert.AreEqual(RSAHelper.decrypt(encryptedText), RSAHelper.decrypt(anotherEncryptedText), false, "Not the same results when encrypting and decrypting the same string");
+		}
+		[TestMethod]
+		public void testUserValidationCorrect()
+		{
+			string name = "test";
+			string surname = "test";
+			string password = "test";
+
+			Validator.ValidateName(name);
+			Validator.ValidateSurname(surname);
+			Validator.ValidatePassword(password);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(Exception), "Empty name should not pass validation")]
+		public void testUserValidationIncorrect()
+		{
+			Validator.ValidateName("");
+		}
 \end{lstlisting}
 
 \section*{Wyglad programu}

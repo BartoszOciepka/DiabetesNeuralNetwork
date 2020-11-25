@@ -1,0 +1,29 @@
+{
+	"stryker-config": {
+		"reporters": [
+			"progress",
+			"html"
+		],
+		"log-level": "info",
+		"log-file": true,
+		"timeout-ms": 10000,
+		"project-file": "C:\\Users\\barto\\Documents\\Visual Studio 2015\\Projects\\DiabetesNeuralNetwork\\DiabetesNeuralNetwork\\DiabetesNeuralNetwork.csproj",
+		"solution-path": "C:\\Users\\barto\\Documents\\Visual Studio 2015\\Projects\\DiabetesNeuralNetwork\\DiabetesNeuralNetwork.sln",
+		"max-concurrent-test-runners": 4,
+		"threshold-high": 80,
+		"threshold-low": 70,
+		"threshold-break": 60,
+		"mutate": [
+			"C\\Users\\barto\\Documents\\Visual Studio 2015\\Projects\\DiabetesNeuralNetwork\\DiabetesNeuralNetwork\\Helpers\\RSAHelpers.cs"
+		],
+		"excluded-mutations": [
+			"string",
+			"Logical operators"
+		],
+		"ignore-methods": [
+			"*Log*",
+			"ToString",
+			"*HashCode*"
+		]
+	}
+}
