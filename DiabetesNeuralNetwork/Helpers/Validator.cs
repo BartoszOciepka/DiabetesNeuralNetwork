@@ -3,7 +3,7 @@ using System;
 
 namespace DiabetesNeuralNetwork
 {
-	class Validator
+	public class Validator
 	{
 		public static void ValidateUser(string name, string surname, string email, string password, int userTypeID)
 		{

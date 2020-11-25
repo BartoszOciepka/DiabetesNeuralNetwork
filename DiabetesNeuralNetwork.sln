@@ -5,16 +5,35 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiabetesNeuralNetwork", "DiabetesNeuralNetwork\DiabetesNeuralNetwork.csproj", "{10EFD2A6-1E3A-4104-A161-6ADDAB5642BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiabetesNeuralNetworkTests", "DiabetesNeuralNetworkTests\DiabetesNeuralNetworkTests.csproj", "{0E54EA63-ACCB-4211-BE10-121E93ABB244}"
+	ProjectSection(ProjectDependencies) = postProject
+		{10EFD2A6-1E3A-4104-A161-6ADDAB5642BF} = {10EFD2A6-1E3A-4104-A161-6ADDAB5642BF}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{10EFD2A6-1E3A-4104-A161-6ADDAB5642BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{10EFD2A6-1E3A-4104-A161-6ADDAB5642BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10EFD2A6-1E3A-4104-A161-6ADDAB5642BF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{10EFD2A6-1E3A-4104-A161-6ADDAB5642BF}.Debug|x86.Build.0 = Debug|Any CPU
 		{10EFD2A6-1E3A-4104-A161-6ADDAB5642BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10EFD2A6-1E3A-4104-A161-6ADDAB5642BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10EFD2A6-1E3A-4104-A161-6ADDAB5642BF}.Release|x86.ActiveCfg = Release|Any CPU
+		{10EFD2A6-1E3A-4104-A161-6ADDAB5642BF}.Release|x86.Build.0 = Release|Any CPU
+		{0E54EA63-ACCB-4211-BE10-121E93ABB244}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E54EA63-ACCB-4211-BE10-121E93ABB244}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E54EA63-ACCB-4211-BE10-121E93ABB244}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0E54EA63-ACCB-4211-BE10-121E93ABB244}.Debug|x86.Build.0 = Debug|Any CPU
+		{0E54EA63-ACCB-4211-BE10-121E93ABB244}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E54EA63-ACCB-4211-BE10-121E93ABB244}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E54EA63-ACCB-4211-BE10-121E93ABB244}.Release|x86.ActiveCfg = Release|Any CPU
+		{0E54EA63-ACCB-4211-BE10-121E93ABB244}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

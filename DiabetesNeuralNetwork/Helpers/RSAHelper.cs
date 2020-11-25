@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DiabetesNeuralNetwork
 {
-	class RSAHelper
+	public class RSAHelper
 	{
 		public static string containerName = "defaultContainerName";
 		public static string encrypt(string message)
