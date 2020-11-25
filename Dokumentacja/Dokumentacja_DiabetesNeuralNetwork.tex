@@ -8,6 +8,7 @@
 \usepackage[]{algorithm2e}
 \usepackage{listings}
 \usepackage{graphicx}
+\usepackage{amsmath}
 \graphicspath{
     {media/}
 }
@@ -191,7 +192,11 @@ W naszym programie komponenty systemu uporządkowane są w odpowienich folderach
 Użyliśmy wzorca projektowego Singleton, dzięki temu nie musimy tworzyć obiektu gdy chcemy zwalidować dane lub je zaszyfrować. Można też uznać, że w ramach używania biblioteki AForge do sieci neuronowej używamy wzorca Fasada.\\\\
 
 Nasza sieć neuronowa jest utworzona przy wykorzystaniu biblioteki AForge \\(http://www.aforgenet.com/framework/docs/). Nie jest to zbyt znana biblioteka, ale do jej wykorzystania przekonała nas bardzo dokładna dokumentacja.\\
-Biblioteka udostępnia nam obiekt ActivationNetwork, który w konstruktorze bierze funkcję aktywacyjną, ilość wejsć sieci oraz tablicę neuronów w poszczególnych warstwach. W naszym wypadku za funkcję aktywacyjną wzieliśmy funkcję sygmoidalną z alfą równą 1.8 (taką wartość uznaliśmy za najlepszą w ramach testowania). Gdy już mamy utworzony obiekt sieci musimy ją nauczyc. Służy do tego klasa BackPropagationLearning (jak i inne, ale my będziemy uczyć sieć używając propagacji wstecznej).
+Biblioteka udostępnia nam obiekt ActivationNetwork, który w konstruktorze bierze funkcję aktywacyjną, ilość wejsć sieci oraz tablicę neuronów w poszczególnych warstwach. W naszym wypadku za funkcję aktywacyjną wzieliśmy funkcję sigmoidalną z alfą równą 1.8 (taką wartość uznaliśmy za najlepszą w ramach testowania). Funkcja ta ma postać:
+\begin{equation}
+f(x)=\dfrac{1}{1+E^{-\alpha *x}}
+\end{equation}
+ Gdy już mamy utworzony obiekt sieci musimy ją nauczyc. Służy do tego klasa BackPropagationLearning (jak i inne, ale my będziemy uczyć sieć używając propagacji wstecznej).
 	
 \section*{Algorytm szyfrowania}
 	
@@ -269,5 +274,14 @@ Biblioteka udostępnia nam obiekt ActivationNetwork, który w konstruktorze bier
 \begin{lstlisting}
 	Tutaj wklejamy pelen kod. 
 \end{lstlisting}
+
+\section*{Wyglad programu}
+
+\includegraphics[width=0.4\linewidth]{media/program1}
+\includegraphics[width=0.4\linewidth]{media/program2}\\
+\includegraphics[width=0.4\linewidth]{media/program3}
+\includegraphics[width=0.4\linewidth]{media/program4}\\
+\includegraphics[width=0.4\linewidth]{media/program5}
+\includegraphics[width=0.4\linewidth]{media/program6}\\
 
 \end{document}
