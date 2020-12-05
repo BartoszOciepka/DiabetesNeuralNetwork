@@ -220,6 +220,36 @@ f(x)=\dfrac{1}{1+E^{-\alpha *x}}
 	Każdy z rozmówców posiada parę kluczy: prywatny i publiczny. Pierwszy z nich służy do deszyfrowania wiadomości przychodzącej, a drugi do szyfrowania wychodzącej. Aby nawiązać komunikację rozmówcy muszą wymienić się swoimi kluczami publicznymi. Klucze prywatne nigdy nie są ujawniane.
 	
 	
+	
+	
+	\subsection*{Generowanie kluczy}
+	Generowanie pary kluczy:
+	\begin{itemize}
+		\item losujemy duże liczby pierwsze $p$ i $q$ odległe, lecz o zbliżonej długości,
+		\item $n = pq$,
+		\item obliczamy funkcję Eulera dla $n$: $ \varphi (n)=(p-1)(q-1) $,
+		\item wybieramy liczbę $e$, gdzie:  $(1 < e < \varphi(n))$, która jest względnie pierwsza z $\varphi(n)$,
+		\item $d ≡ e−1 (mod \varphi(n))$, czyli: $d⋅e ≡ 1 (mod \varphi(n))$,
+		\item kluczem publicznym jest para liczb $(n, e)$, a prywatnym $(n, d)$.
+	\end{itemize}
+	
+	
+	\subsection*{Szyfrowanie i deszyfrowanie}
+	Korzystamy z dwóch wzorów:
+	\begin{itemize}
+		\item wiadomość dzielimy na bloki $m$ o wartości nie większej niż $n$, a następnie: $c\equiv m^{e}{\pmod {n}}$,
+		\item zaszyfrowane bloki $c$ deszyfrujemy wzorem: $m\equiv c^{d}{\pmod {n}}$.
+	\end{itemize}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 \section*{System ekspercki}
 
 	W dziale sztucznej inteligencji systemem eksperckim (Expert System -- ES) nazywa się system komputerowy, który emuluje podejmowanie decyzji przez ludzkiego specjalistę z danej dziedziny. Odzwierciedla procesy myślowe na zasadzie działania ludzkiego mózgu.
