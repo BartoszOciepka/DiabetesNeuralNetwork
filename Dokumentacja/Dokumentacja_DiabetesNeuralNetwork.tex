@@ -291,6 +291,100 @@ f(x)=\dfrac{1}{1+E^{-\alpha *x}}
 	Wady to przede wszystkim brak zdrowego rozsądku. Dla komputera liczby to liczby więc błędne dane czy dane na logikę wskazujące na pewne rozwiązanie nie zwrócą jego uwagi. Dochodzi do tego możliwość przeuczenia sieci, błędne dopasowanie parametrów sieci lub zbyt mały zbiór danych i mamy rozwiązanie, które jest bardzo potężne, ale wymaga uwagi i wiedzy aby poprawnie zaimplementować.
 	
 	
+	
+	
+	
+\section*{Sieć neuronowa}
+	
+	Siecią neuronową nazywa się struktury matematyczne z ich programowymi implementacjami. Realizują obliczenia i przetwarzają sygnały drobnymi elementami nazywanymi sztucznymi neuronami, które wykonują proste operacje na otrzymanych danych wejściowych.
+	
+	Zasada działania opiera się na mózgu składającym się z naturalnych neuronów, łączących je synaps oraz układów nerwowych. 
+	
+	Typy sieci neuronowych:
+	\begin{itemize}
+		\item jednokierunkowe -- bez sprzężenia zwrotnego,
+		\item rekurencyjne -- ze sprzężeniem zwrotnym,
+		\item samoorganizujące się mapy -- sieci Kohonena, gdzie neurony są stowarzyszone ze współrzędnymi na prostej lub przestrzeni wyższego rzędu.
+	\end{itemize}
+
+
+	\subsection*{Dobieranie parametrów w programie}
+	
+	W naszym programie do dobierania optymalnych parametrów służy metoda \emph{compareTrainingParameters()}. Iteruje ona, zgodnie z parametrami po kolejnej liczbie warstw oraz po liczbach neuronów w każdej warstwie. Istnieje jednak warunek, że w kolejnej warstwie nie może być więcej neuronów niż w poprzedniej.
+	
+	
+	\begin{lstlisting}
+		internal static void compareTrainingParameters()
+		{
+			//Random rand = new Random();
+			maxNeurons = 16;
+			minNeuronsBefore = maxNeurons;
+			int maxLayers = 3;
+			
+			Console.WriteLine("Max neurons in a layer:\t" + maxNeurons);
+			Console.WriteLine("Max number of layers:\t" + maxLayers);
+			Console.WriteLine("Alpha:\t" + alpha);
+			Console.WriteLine("Max error accepted:\t" + maxError);
+			
+			for (layersNumber = 2; layersNumber<=maxLayers; layersNumber++)
+			{
+				Console.WriteLine("\nCurrent number of layers:\t" + layersNumber);
+				
+				int[] neuronsTable = new int[layersNumber];
+				neuronsTable[layersNumber - 1] = 1;
+				
+				// generate all possibilities for a set of layers
+				//neurons[i] = rand.Next(1, maxNeurons);
+				incrementNeuron(0, neuronsTable, minNeuronsBefore);
+			}
+		}
+		private static void incrementNeuron(int layer, int[] neuronsTable, int minNeuronsBefore)
+		{
+			double error;
+			// last layer with neurons
+			if(layer==layersNumber-2)
+			{
+				for(int neu=1; neu<=minNeuronsBefore; neu++)
+				{
+					neuronsTable[layer] = neu;
+					
+					int timesEachValuesAreTested = 1;
+					
+					Console.Write("Testing: ");
+					foreach (int n in neuronsTable) Console.Write(n + " ");
+					
+					error = trainNetwork(neuronsTable, alpha, false, timesEachValuesAreTested);
+					if (error <= maxError)
+					{
+						Console.WriteLine("\tError: " + error);
+					}
+					else
+					{
+						Console.WriteLine("\tError too much");
+					}
+				}
+				//foreach (int n in neuronsTable) Console.Write(n + " ");
+				Console.WriteLine();
+			}
+			// increment and next number
+			else
+			{
+				for (int neu = 1; neu <= minNeuronsBefore; neu++)
+				{
+					neuronsTable[layer] = neu;
+					if (minNeuronsBefore > neu)
+					incrementNeuron(layer+1, neuronsTable, neu);
+					else
+					incrementNeuron(layer + 1, neuronsTable, minNeuronsBefore);
+				}
+				//foreach (int n in neuronsTable) Console.Write(n + " ");
+				//Console.WriteLine();
+				return;
+			}
+		}
+	\end{lstlisting}
+	
+	
 
 \section*{Przykładowy kod z aplikacji z testami}
 
